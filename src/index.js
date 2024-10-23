@@ -7,6 +7,8 @@ import app from './routes';
 
 import { converter, notFound, handler } from './utils/ErrorUtil';
 import { connectDB } from './config/mongoose';
+import Io from 'socket.io';
+import { commonSocket } from './sockets/common-config-socket';
 
 // connect mongodb
 connectDB();
@@ -20,6 +22,9 @@ app.use(notFound);
 // error handler, send stacktrace only during development
 app.use(handler);
 
-app.listen(process.env.PORT, () => {
+const server =app.listen(process.env.PORT, () => {
     console.log(`Application running on port ${process.env.PORT}`);
 });
+
+const io =Io(server);
+commonSocket(io);
